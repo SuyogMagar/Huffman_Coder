@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class HuffmanCoderApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(HuffmanCoderApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(HuffmanCoderApplication.class, args);
+    }
 
 }

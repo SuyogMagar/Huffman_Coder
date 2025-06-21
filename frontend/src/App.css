@@ -1,8 +1,10 @@
 .App {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-radius: 15px;
   padding: 2rem;
+  padding-top: 80px;
   width: 90%;
   max-width: 800px;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
@@ -56,6 +58,7 @@
   margin-bottom: 1.5rem;
   font-size: 1.8rem;
   font-weight: 500;
+  color: #EEEEEE;
 }
 
 .file-input-container {
@@ -67,8 +70,8 @@
 }
 
 .file-label {
-  background-color: #6a11cb;
-  color: white;
+  background-color: #00ADB5;
+  color: #EEEEEE;
   padding: 12px 20px;
   border-radius: 5px;
   cursor: pointer;
@@ -78,7 +81,7 @@
 }
 
 .file-label:hover {
-  background-color: #2575fc;
+  background-color: #007c80;
 }
 
 .file-name {
@@ -88,8 +91,8 @@
 }
 
 .btn {
-  background: linear-gradient(to right, #2575fc, #6a11cb);
-  color: white;
+  background: #00ADB5;
+  color: #EEEEEE;
   border: none;
   padding: 12px 30px;
   font-size: 1rem;
@@ -104,6 +107,7 @@
 .btn:hover {
   opacity: 0.9;
   transform: scale(1.05);
+  background-color: #007c80;
 }
 
 .btn:disabled {

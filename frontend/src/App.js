@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Navbar from './components/Navbar';
 import './App.css';
 
 function App() {
@@ -71,63 +72,66 @@ function App() {
     };
 
     return (
-        <div className="App">
-            <header className="App-header">
-                <h1>Huffman Coder</h1>
-            </header>
+        <>
+            <Navbar />
+            <div className="App">
+                <header className="App-header">
+                    <h1>Huffman Coder</h1>
+                </header>
 
-            <main className="coder-section">
-                <div className="coder-container">
-                    <h2>Compress File</h2>
-                    <div className="file-input-container">
-                        <input
-                            type="file"
-                            id="compress-file"
-                            className="file-input"
-                            onChange={handleCompressFileChange}
-                        />
-                        <label htmlFor="compress-file" className="file-label">
-                            Choose File
-                        </label>
-                        {compressFile && (
-                            <p className="file-name">Selected: {compressFile.name}</p>
-                        )}
+                <main className="coder-section">
+                    <div className="coder-container">
+                        <h2>Compress File</h2>
+                        <div className="file-input-container">
+                            <input
+                                type="file"
+                                id="compress-file"
+                                className="file-input"
+                                onChange={handleCompressFileChange}
+                            />
+                            <label htmlFor="compress-file" className="file-label">
+                                Choose File
+                            </label>
+                            {compressFile && (
+                                <p className="file-name">Selected: {compressFile.name}</p>
+                            )}
+                        </div>
+                        <button
+                            className="btn"
+                            onClick={handleCompress}
+                            disabled={!compressFile}
+                        >
+                            Compress
+                        </button>
                     </div>
-                    <button
-                        className="btn"
-                        onClick={handleCompress}
-                        disabled={!compressFile}
-                    >
-                        Compress
-                    </button>
-                </div>
 
-                <div className="coder-container">
-                    <h2>Decompress File</h2>
-                    <div className="file-input-container">
-                        <input
-                            type="file"
-                            id="decompress-file"
-                            className="file-input"
-                            onChange={handleDecompressFileChange}
-                        />
-                        <label htmlFor="decompress-file" className="file-label">
-                            Choose File
-                        </label>
-                        {decompressFile && (
-                            <p className="file-name">Selected: {decompressFile.name}</p>
-                        )}
+                    <div className="coder-container">
+                        <h2>Decompress File</h2>
+                        <div className="file-input-container">
+                            <input
+                                type="file"
+                                id="decompress-file"
+                                className="file-input"
+                                onChange={handleDecompressFileChange}
+                            />
+                            <label htmlFor="decompress-file" className="file-label">
+                                Choose File
+                            </label>
+                            {decompressFile && (
+                                <p className="file-name">Selected: {decompressFile.name}</p>
+                            )}
+                        </div>
+                        <button
+                            className="btn"
+                            onClick={handleDecompress}
+                            disabled={!decompressFile}
+                        >
+                            Decompress
+                        </button>
                     </div>
-                    <button
-                        className="btn"
-                        onClick={handleDecompress}
-                        disabled={!decompressFile}
-                    >
-                        Decompress
-                    </button>
-                </div>
-            </main>
-        </div>
+                </main>
+            </div>
+        </>
     );
 }
 

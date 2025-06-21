@@ -71,28 +71,23 @@ public class HuffmanService {
         ObjectInputStream ois = new ObjectInputStream(bais);
         @SuppressWarnings("unchecked")
         Map<Byte, Integer> freqMap = (Map<Byte, Integer>) ois.readObject();
-        
-        int headerSize = bais.available() - ois.available();
-        bais.reset();
-        bais.skip(headerSize);
 
+        // Now the stream is at the padding byte
         int padding = bais.read();
-        
-        byte[] dataBytes = new byte[bais.available()];
-        bais.read(dataBytes);
 
+        // The rest is the compressed data
+        byte[] dataBytes = bais.readAllBytes();
 
         Node root = buildHuffmanTree(freqMap);
 
         StringBuilder encodedData = new StringBuilder();
-        for (int i = 0; i < dataBytes.length; i++) {
-            encodedData.append(String.format("%8s", Integer.toBinaryString(dataBytes[i] & 0xFF)).replace(' ', '0'));
+        for (byte b : dataBytes) {
+            encodedData.append(String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
         }
 
         if (padding > 0) {
             encodedData.setLength(encodedData.length() - padding);
         }
-
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Node current = root;

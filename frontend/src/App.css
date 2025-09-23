@@ -1,15 +1,17 @@
 .App {
-  background: rgba(0, 0, 0, 0.2);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 2rem;
+  background: transparent; /* remove outer box */
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-radius: 0;
+  padding: 2rem 2rem 2.5rem 2rem;
   padding-top: 80px;
-  width: 90%;
-  max-width: 800px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  width: 100%;
+  max-width: none;
+  box-shadow: none;
+  border: none;
   text-align: center;
+  margin: 0 auto;
+  overflow: visible;
 }
 
 .App-logo {
@@ -36,17 +38,30 @@
 
 .coder-section {
   display: flex;
-  justify-content: space-around;
-  gap: 2rem;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1.5rem;
   margin-top: 2rem;
+  width: 100%;
+  /* Keep all feature cards in a single horizontal row */
+  flex-wrap: nowrap;
 }
 
 .coder-container {
   background: rgba(255, 255, 255, 0.15);
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: 10px;
-  width: 45%;
   transition: all 0.3s ease;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* Make three equal columns that fit inside the row including gaps */
+  box-sizing: border-box;
+  flex: 1 1 calc((100% - 3rem) / 3); /* allow shrink to avoid overflow */
+  max-width: calc((100% - 3rem) / 3);
+  min-width: 300px;
+  animation: card-enter 600ms ease both;
 }
 
 .coder-container:hover {
@@ -115,11 +130,100 @@
   cursor: not-allowed;
 }
 
+.compression-stats {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(0, 173, 181, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 173, 181, 0.3);
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+.compression-stats h3 {
+  margin-bottom: 0.5rem;
+  color: #00ADB5;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.compression-stats p {
+  margin: 0.25rem 0;
+  font-size: 0.8rem;
+  color: #EEEEEE;
+}
+
+.compression-stats strong {
+  color: #00ADB5;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .coder-container {
+    flex: 0 0 40%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .coder-container {
+    flex: 0 0 48%;
+  }
+}
+
+@media (max-width: 768px) {
+  .App {
+    width: 98%;
+    padding: 1rem;
+    padding-top: 60px;
+  }
+  
+  .coder-container {
+    padding: 1rem;
+    min-height: auto;
+    flex: 0 0 85%;
+  }
+  
+  .App-header h1 {
+    font-size: 2rem;
+  }
+  
+  .coder-container h2 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .App {
+    padding: 0.5rem;
+    padding-top: 50px;
+  }
+  
+  .coder-container {
+    padding: 0.8rem;
+  }
+  
+  .compression-stats {
+    padding: 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }

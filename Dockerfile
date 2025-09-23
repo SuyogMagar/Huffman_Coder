@@ -1,33 +1,38 @@
-# Stage 1: Build the application with Maven
+# Stage 1: Build backend and frontend
 FROM maven:3.9-eclipse-temurin-21 AS build
 
-# Install Node.js (which includes npm) using NodeSource distributions
+# Install Node.js for frontend build
 RUN apt-get update && \
-    apt-get install -y ca-certificates curl gnupg && \
-    mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    NODE_MAJOR=20 && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
-    apt-get update && \
-    apt-get install nodejs -y
+    apt-get install -y curl gnupg && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs
 
 WORKDIR /app
 
-# Copy the entire project
+# Copy entire project
 COPY . .
 
-# Build the project, this will also build the frontend
+# Build frontend
+WORKDIR /app/frontend
+RUN npm install && npm run build
+
+# Copy frontend build output into Spring Boot resources
+WORKDIR /app
+RUN rm -rf src/main/resources/static/* && \
+    cp -r frontend/build/* src/main/resources/static/
+
+# Build backend (Spring Boot jar)
 RUN mvn clean package -DskipTests
 
-# Stage 2: Create the final image
+# Stage 2: Final runtime image
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 
-# Copy the built jar from the build stage
+# Copy the built jar
 COPY --from=build /app/target/*.jar app.jar
 
-# Expose the port the app runs on
+# Expose port
 EXPOSE 8080
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"] 
+# Start the app
+ENTRYPOINT ["java", "-jar", "app.jar"]

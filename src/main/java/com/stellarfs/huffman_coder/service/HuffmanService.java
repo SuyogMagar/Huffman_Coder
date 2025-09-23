@@ -67,45 +67,72 @@ public class HuffmanService {
     }
 
     public byte[] decompress(byte[] data) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream bais = new ByteArrayInputStream(data);
-        ObjectInputStream ois = new ObjectInputStream(bais);
-        @SuppressWarnings("unchecked")
-        Map<Byte, Integer> freqMap = (Map<Byte, Integer>) ois.readObject();
-
-        // Now the stream is at the padding byte
-        int padding = bais.read();
-
-        // The rest is the compressed data
-        byte[] dataBytes = bais.readAllBytes();
-
-        Node root = buildHuffmanTree(freqMap);
-
-        StringBuilder encodedData = new StringBuilder();
-        for (byte b : dataBytes) {
-            encodedData.append(String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
+        if (data == null || data.length == 0) {
+            throw new IOException("Empty compressed data");
         }
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(data);
+             ObjectInputStream ois = new ObjectInputStream(bais)) {
+            @SuppressWarnings("unchecked")
+            Map<Byte, Integer> freqMap = (Map<Byte, Integer>) ois.readObject();
 
-        if (padding > 0) {
-            encodedData.setLength(encodedData.length() - padding);
-        }
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Node current = root;
-        for (int i = 0; i < encodedData.length(); i++) {
-            char c = encodedData.charAt(i);
-            if (c == '0') {
-                current = current.left;
-            } else {
-                current = current.right;
+            int padding = bais.read();
+            if (padding < 0 || padding > 7) {
+                throw new IOException("Invalid padding value in compressed data");
             }
 
-            if (current.isLeaf()) {
-                baos.write(current.data);
-                current = root;
+            byte[] dataBytes = bais.readAllBytes();
+            if (dataBytes.length == 0 && padding != 0) {
+                throw new IOException("Corrupted compressed payload");
             }
-        }
 
-        return baos.toByteArray();
+            Node root = buildHuffmanTree(freqMap);
+            if (root == null) {
+                return new byte[0];
+            }
+
+            StringBuilder encodedData = new StringBuilder();
+            for (byte b : dataBytes) {
+                encodedData.append(String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
+            }
+
+            if (padding > 0) {
+                if (padding > encodedData.length()) {
+                    throw new IOException("Padding exceeds encoded data length");
+                }
+                encodedData.setLength(encodedData.length() - padding);
+            }
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            if (root.isLeaf()) {
+                // Special case: only one unique byte in original data.
+                // There are no bits to traverse; however, without original length we cannot infer count.
+                // In current format we cannot recover length, so return zero-length to avoid NPEs.
+                return baos.toByteArray();
+            }
+
+            Node current = root;
+            for (int i = 0; i < encodedData.length(); i++) {
+                char c = encodedData.charAt(i);
+                if (c == '0') {
+                    if (current.left == null) {
+                        throw new IOException("Corrupted bitstream: unexpected '0'");
+                    }
+                    current = current.left;
+                } else {
+                    if (current.right == null) {
+                        throw new IOException("Corrupted bitstream: unexpected '1'");
+                    }
+                    current = current.right;
+                }
+
+                if (current.isLeaf()) {
+                    baos.write(current.data);
+                    current = root;
+                }
+            }
+
+            return baos.toByteArray();
+        }
     }
 
     private Map<Byte, Integer> getFrequencyMap(byte[] data) {

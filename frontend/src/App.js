@@ -143,9 +143,6 @@ function App() {
             <Starfield />
             <Navbar />
             <div className="App">
-                <header className="App-header">
-                    <h1>Huffman Coder</h1>
-                </header>
 
                 <main className="coder-section">
                     <div className="coder-container">

@@ -36,11 +36,60 @@
   text-transform: uppercase;
 }
 
+/* About page styles - inherit theme and animations */
+.about {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 2rem 3rem 2rem;
+  text-align: left;
+  position: relative;
+  z-index: 1;
+}
+
+.about-hero {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.about-hero h1 {
+  font-size: 6rem;
+  letter-spacing: 1px;
+}
+
+.about-sub {
+  color: #A3BAC5;
+  margin-top: 0.5rem;
+  font-size: 2rem;
+}
+
+.about-content {
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  padding: 1.5rem;
+  animation: card-enter 600ms ease both;
+  line-height: 1.6;
+  font-size: 1.6rem;
+}
+
+.about-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+@media (max-width: 960px) {
+  .about {
+    padding-top: 5rem;
+  }
+}
+
 .coder-section {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  gap: 1.5rem;
+  justify-content: center; /* center the feature cards */
+  gap: 2rem; /* a bit more spacing */
   margin-top: 2rem;
   width: 100%;
   /* Keep all feature cards in a single horizontal row */
@@ -49,7 +98,7 @@
 
 .coder-container {
   background: rgba(255, 255, 255, 0.15);
-  padding: 1.5rem;
+  padding: 1.75rem; /* slightly larger card padding */
   border-radius: 10px;
   transition: all 0.3s ease;
   min-height: 200px;
@@ -58,9 +107,9 @@
   justify-content: space-between;
   /* Make three equal columns that fit inside the row including gaps */
   box-sizing: border-box;
-  flex: 1 1 calc((100% - 3rem) / 3); /* allow shrink to avoid overflow */
-  max-width: calc((100% - 3rem) / 3);
-  min-width: 300px;
+  flex: 0 0 360px; /* bigger cards */
+  max-width: 420px;
+  min-width: 320px;
   animation: card-enter 600ms ease both;
 }
 
@@ -71,7 +120,7 @@
 
 .coder-container h2 {
   margin-bottom: 1.5rem;
-  font-size: 1.8rem;
+  font-size: 2.2rem;
   font-weight: 500;
   color: #EEEEEE;
 }
@@ -93,6 +142,7 @@
   display: inline-block;
   transition: background-color 0.3s ease;
   font-weight: 500;
+  font-size: 1.05rem;
 }
 
 .file-label:hover {
@@ -110,7 +160,7 @@
   color: #EEEEEE;
   border: none;
   padding: 12px 30px;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 500;
   border-radius: 5px;
   cursor: pointer;
@@ -143,15 +193,27 @@
 .compression-stats h3 {
   margin-bottom: 0.5rem;
   color: #00ADB5;
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   text-align: center;
 }
 
 .compression-stats p {
   margin: 0.25rem 0;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: #EEEEEE;
 }
+
+/* About page specific typography overrides */
+.about .btn {
+  padding: 16px 36px;
+  font-size: 2rem;
+  text-decoration: none; /* remove underline for anchor button */
+}
+.about .btn:hover { text-decoration: none; }
+.about .file-label { font-size: 2rem; }
+.about .about-content { font-size: 1.6rem; }
+.about .about-sub { font-size: 2rem; }
+.about .about-hero h1 { font-size: 6rem; }
 
 .compression-stats strong {
   color: #00ADB5;

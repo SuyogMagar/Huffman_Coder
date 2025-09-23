@@ -17,7 +17,7 @@ const Navbar = () => {
                 <div></div>
             </div>
             <ul className={isOpen ? 'navbar-links active' : 'navbar-links'}>
-                <li><a href="#about">About</a></li>
+                <li><a href="/about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>

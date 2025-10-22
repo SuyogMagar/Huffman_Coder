@@ -18,7 +18,8 @@ RUN npm install && npm run build
 
 # Copy frontend build output into Spring Boot resources
 WORKDIR /app
-RUN rm -rf src/main/resources/static/* && \
+RUN mkdir -p src/main/resources/static && \
+    rm -rf src/main/resources/static/* && \
     cp -r frontend/build/* src/main/resources/static/
 
 # Build backend (Spring Boot jar)
